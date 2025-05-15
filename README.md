@@ -1,9 +1,9 @@
-News Sentiment Analyzer with Real-Time Alerts
+# News Sentiment Analyzer with Real-Time Alerts
  
 A Python-based tool that scrapes news headlines from Google News, performs sentiment analysis, visualizes sentiment trends, and sends SMS alerts for critical negative news. Built for real-time monitoring of news sentiment, this project is ideal for researchers, businesses, or individuals tracking public perception.
 Table of Contents
 
-Project Overview
+## Project Overview
 Features
 Tech Stack
 Installation
@@ -15,7 +15,7 @@ References
 License
 Contact
 
-Project Overview
+## Project Overview
 This project automates the process of tracking news sentiment by scraping headlines, analyzing their emotional tone, and alerting users to critical negative events. It combines web scraping, natural language processing (NLP), data visualization, and real-time notifications, making it a versatile tool for sentiment analysis.
 Problem Statement: News overload makes it challenging to identify emotionally charged events manually. This system provides automated, real-time sentiment tracking and alerts.
 Goal: Enable users to monitor news sentiment and receive timely notifications for critical events, improving decision-making and awareness.
@@ -28,7 +28,7 @@ SMS Alerts: Sends notifications via Twilio for highly negative news (sentiment â
 Web Interface: Flask-based dashboard for viewing results and interacting with the system.
 Scalable Design: Suitable for deployment on free hosting platforms like PythonAnywhere.
 
-Tech Stack
+## Tech Stack
 
 Web Scraping: BeautifulSoup, Requests
 Sentiment Analysis: TextBlob
@@ -38,7 +38,7 @@ Web Framework: Flask
 Environment: Python 3.8+, Google Colab or local Jupyter Notebook
 Deployment: PythonAnywhere (free tier)
 
-Installation
+## Installation
 
 Clone the Repository:
 git clone https://github.com/your-username/news-sentiment-analyzer.git
@@ -52,7 +52,7 @@ Or manually install:
 pip install requests beautifulsoup4 textblob plotly twilio flask pandas
 
 
-Set Up Twilio Credentials:
+## Set Up Twilio Credentials:
 
 Sign up for a Twilio account.
 Obtain account_sid, auth_token, and a Twilio phone number.
@@ -66,7 +66,7 @@ export TWILIO_PHONE_NUMBER='+1234567890'
 
 
 
-Usage
+## Usage
 
 Run Locally:
 python app.py
@@ -99,7 +99,7 @@ print(news_df)
 
 
 
-Sample Output
+## Sample Output
 
 
 
