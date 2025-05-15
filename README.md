@@ -1,76 +1,173 @@
-# Python Algorithms for Randomized Linear Algebra (PARLA)
-
-PARLA is a Python package for prototyping the *mathematical* structure of a future C++ library for randomized numerical linear algebra.
-The future library is meant to be "LAPACK-like" and will organize its functionality into high-level "drivers" and lower-level "computational routines".
-PARLA is to be viewed as an informal, "proof of mathematical concept"-type library, serving only as a rough sketch for the future library.
-At the moment, PARLA is not maintained for the purposes of external use (unless per explicit requests).
-
-The main difference between PARLA and LAPACK (aside from LAPACK being written in Fortran!) is that PARLA defines
-algorithms in an object-oriented way.
-This approach makes it easy to modify a driver's implementation by overriding the default implementation of some constituent computational routine.
-All driver-level functionality has passed basic tests.
-
-PARLA has a companion Matlab library called [MARLA](https://github.com/BallisticLA/marla).
-MARLA has a purely procedural design and isn't meant to be as general as PARLA.
-The state of PARLA and MARLA's APIs and unit tests is summarized in [this Google Sheets spreadsheet](https://docs.google.com/spreadsheets/d/15vIS5wkaVB5lUoVQZqg7J_2qsK04ycVN47Mo2LuIKAo/edit?usp=sharing).
-(It will be hard to read that spreadsheet without having the RandLAPACK design document on-hand.)
-
-There are no plans to distribute this Python package through PyPI or conda.
-
-## How to install
-The following detailed instructions assume you have Git available from the command line.
-You might need to modify the commands if you're running Windows or macOS.
-
-  1. Make sure you have [conda](https://conda.io/projects/conda/en/latest/user-guide/install/index.html#regular-installation) installed.
-  2. Move to a directory where you can make a folder for this repo.
-       * If you just want to try out notebooks, that directory might be something like ``~/Desktop/temp/``.
-  3. Get the source code by running ``git clone https://github.com/rileyjmurray/parla.git``.
-       * That will create a folder like ``~/Desktop/temp/parla`` that contains the contents of this repo.
-       * Change directory so you're in the new folder. You should have ``setup.py`` in your working directory.
-  4. Create and activate a new python environment.
-       * Decide on an environment name.
-          * For concreteness, I'll use the name ``rla39a`` moving forward.
-       * If you have an Intel machine and want to link into MKL, do the following.
-           * Run ``conda create --name rla39a python=3.9 pytest mkl -y``,
-           * Run ``conda activate rla39a``,
-           * Run ``conda install -c intel numpy -y``,
-           * Run ``conda install scipy jupyter matplotlib -y``.
-       * If you don't have an Intel machine or if you want to use OpenBLAS, do the following.
-           * Run ``conda create --name rla39a python=3.9 pytest numpy scipy jupyter matplotlib -y``.
-           * Run ``conda activate rla39a``.
-  5. Install parla by running ``pip install -e .``.
-       * You need to be in the same directory that contains parla's ``setup.py`` file.
-       * This command makes it possible to import parla from python, no matter your working directory.
-       * The ``-e`` flag means that any edits to parla source code will be incorporated on future imports.
-  6. Optional: run unittests with the command  ``pytest parla``
-       * You need to be in the same directory that contains parla's ``setup.py`` file.
-  7. Optional: verify that NumPy and SciPy are linked against the expected BLAS and LAPACK implementations
-       * Run `` python -c "import numpy as np; np.show_config()"``
-       * The command above will probably mention MKL or OpenBLAS. If you wanted MKL and it makes *any*
-         mention of OpeBLAS, then something went wrong in the installation process.
-         Email me (rjmurray@berkeley.edu) for help.
-
-### Notes on MKL vs OpenBLAS
-
-Unless you go out of your way to install a version of NumPy that's linked to MKL, you'll almost certainly
-end up with NumPy and SciPy getting linked against OpenBLAS. OpenBLAS comes with an LAPACK implementation, however,
-it's almost a direct copy from the Netlib LAPACK implementation. That implementation is very inefficient
-(all things considered) and results in unnecessarily poor performance for some Python  functions that call
-into LAPACK (particularly, SciPy's least squares solver). I strongly recommend that you use MKL if possible.
-
-## How to uninstall
-The installation process above might take up a nontrivial amount of space on your computer. For example, the Intel MKL library is around 200 megabytes. You might want to delete the python environement if you're certain that you're done working with parla. If you named your environment ``rla39a`` like above, then you'd run ``conda env remove --name rla39a``. Make sure you are in a *different* python environment before running that command.
+News Sentiment Analyzer with Real-Time Alerts
  
-## How to run Jupyter Notebooks
-The following instructions are very generic.
-However, they assume you've gone through the installation process described above.
+A Python-based tool that scrapes news headlines from Google News, performs sentiment analysis, visualizes sentiment trends, and sends SMS alerts for critical negative news. Built for real-time monitoring of news sentiment, this project is ideal for researchers, businesses, or individuals tracking public perception.
+Table of Contents
 
-  1. Make sure to activate the python environment with your parla installation.
-      * From the installation example, the command would be ``conda activate rla39a``.
-  2. Move to any directory on your computer that has your desired notebook somewhere in its subdirectories.
-      * You don't need to have the notebook in your working directory.
-  3. Run ``jupyter-notebook``.
-      * This should print out some messages and might launch a browser window.
-      * The messages printed by this command should include two or three URLs; go to the last URL.
+Project Overview
+Features
+Tech Stack
+Installation
+Usage
+Sample Output
+Deployment
+Future Enhancements
+References
+License
+Contact
 
-Your browser should now be running a Jupyter Notebook server. You can navigate to the notebook you want to run (such as [one of](https://github.com/rileyjmurray/parla/blob/main/notebooks/least_squares/procedural_least_squares_driver.ipynb) [these two](https://github.com/rileyjmurray/parla/blob/main/notebooks/least_squares/sap1_vs_lapack.ipynb)) and launch it.
+Project Overview
+This project automates the process of tracking news sentiment by scraping headlines, analyzing their emotional tone, and alerting users to critical negative events. It combines web scraping, natural language processing (NLP), data visualization, and real-time notifications, making it a versatile tool for sentiment analysis.
+Problem Statement: News overload makes it challenging to identify emotionally charged events manually. This system provides automated, real-time sentiment tracking and alerts.
+Goal: Enable users to monitor news sentiment and receive timely notifications for critical events, improving decision-making and awareness.
+Features
+
+Real-Time News Scraping: Fetches headlines from Google News based on user-defined keywords.
+Sentiment Analysis: Uses TextBlob to score headline sentiment (-1 to +1) and classify as Positive, Negative, or Neutral.
+Interactive Visualizations: Generates Plotly bar charts to display sentiment distribution.
+SMS Alerts: Sends notifications via Twilio for highly negative news (sentiment ≤ -0.5).
+Web Interface: Flask-based dashboard for viewing results and interacting with the system.
+Scalable Design: Suitable for deployment on free hosting platforms like PythonAnywhere.
+
+Tech Stack
+
+Web Scraping: BeautifulSoup, Requests
+Sentiment Analysis: TextBlob
+Data Visualization: Plotly, Pandas
+Alerts: Twilio API
+Web Framework: Flask
+Environment: Python 3.8+, Google Colab or local Jupyter Notebook
+Deployment: PythonAnywhere (free tier)
+
+Installation
+
+Clone the Repository:
+git clone https://github.com/your-username/news-sentiment-analyzer.git
+cd news-sentiment-analyzer
+
+
+Install Dependencies:
+pip install -r requirements.txt
+
+Or manually install:
+pip install requests beautifulsoup4 textblob plotly twilio flask pandas
+
+
+Set Up Twilio Credentials:
+
+Sign up for a Twilio account.
+Obtain account_sid, auth_token, and a Twilio phone number.
+Add credentials to config.py or directly in the code (not recommended for production).
+
+
+Optional: Configure environment variables for sensitive data:
+export TWILIO_ACCOUNT_SID='your_sid'
+export TWILIO_AUTH_TOKEN='your_token'
+export TWILIO_PHONE_NUMBER='+1234567890'
+
+
+
+Usage
+
+Run Locally:
+python app.py
+
+Access the web interface at http://127.0.0.1:5000.
+
+Run in Google Colab:
+
+Copy the code from main.ipynb into a Colab notebook.
+Install dependencies using !pip install ....
+Execute cells sequentially to scrape news, analyze sentiment, and generate visualizations.
+
+
+Customize Keyword:
+
+Modify the keyword parameter in scrape_news(keyword="AI") to track specific topics (e.g., "climate change", "technology").
+
+
+Enable SMS Alerts:
+
+Uncomment the send_sms_alert() call in the code.
+Ensure Twilio credentials are configured.
+
+
+Example Command:
+from scraper import scrape_news, analyze_sentiment
+news_df = scrape_news(keyword="Artificial Intelligence", num_articles=10)
+news_df = analyze_sentiment(news_df)
+print(news_df)
+
+
+
+Sample Output
+
+
+
+Title
+Link
+Sentiment
+Label
+
+
+
+AI Breakthrough in Cancer Research
+https://news.google.com/...
+0.82
+Positive
+
+
+Tech Layoffs Due to AI Automation
+https://news.google.com/...
+-0.65
+Negative
+
+
+Sentiment Distribution: 
+SMS Alert Example:
+⚠️ Negative Alert: Tech Layoffs Due to AI Automation
+
+Deployment
+
+PythonAnywhere:
+
+Sign up at PythonAnywhere.
+Upload project files via the Files tab.
+Configure a web app with Flask (follow PythonAnywhere's Flask setup guide).
+Set up a scheduled task for periodic scraping using APScheduler or cron jobs.
+
+
+Local Server:
+
+Run app.py with a public-facing server (e.g., using ngrok for testing).
+Ensure Twilio webhook is configured for SMS functionality.
+
+
+Scaling:
+
+Migrate to FastAPI for better performance in production.
+Use a database (e.g., SQLite) for storing historical data.
+
+
+
+Future Enhancements
+
+Social Media Integration: Add Twitter/X sentiment analysis using Tweepy.
+Stock Correlation: Correlate news sentiment with stock price movements.
+PDF Reports: Generate automated reports using FPDF.
+Chrome Extension: Build a browser extension for live page analysis.
+Multi-Source Scraping: Include additional news sources (e.g., BBC, CNN).
+
+References
+
+Pang, B., & Lee, L. (2008). Opinion Mining and Sentiment Analysis. Foundations and Trends in Information Retrieval.
+TextBlob Documentation
+Twilio API Documentation
+Plotly Python Documentation
+Dataset: Google News (scraped in real-time)
+
+
+
+Issues: Feel free to open an issue for bugs or feature requests!
+
+
+⭐ If you find this project useful, please give it a star on GitHub!Contributions are welcome via pull requests.
